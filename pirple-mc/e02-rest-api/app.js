@@ -32,7 +32,6 @@ const server = http.createServer( function( request, response ){
 	let decoder = new StringDecoderLib.StringDecoder('utf-8')
 	let buffer = []
 	request.on('data',function(data){
-		console.log('request on data callback')
 		buffer.push( decoder.write(data) )
 	})
 	request.on('end',function(){
@@ -57,8 +56,9 @@ const server = http.createServer( function( request, response ){
 			response.writeHead( status_code )
 			
 			let response_body = typeof(response_params.body) == 'string' ? response_params.body : ''
-			response.write( response_body )
-			response.end( "\n" )
+			let body_size = response_body.length
+			console.log( `RESPONSE #${request_count} ${status_code} ${body_size} bytes` )
+			response.end( response_body )
 		} ) 
 		
 	})
