@@ -76,38 +76,38 @@ handlers.index = function( request_params, response_handler ){
 
 	let buffer = []
 	buffer.push( `<html>
-		<head>
-		<style>
-		* {
-			box-sizing: border-box;
-		}
-		html, body { 
-			margin: 0;
-			padding: 0;
-			font-size: 16pt;
-		}
-		header {
-			background-color: DarkBlue;
-			color: white;
-			text-align: center;
-			padding: 16px;
-			font-size: 24pt;
-			font-weight: bold;
-		}
-		footer {
-			display: block;
-			border: 1px solid black;
-			text-align: center;
-			/*position: absolute;
-			bottom: 0px;*/
-			width: 100%;
-			background-color: DarkSlateBlue;
-			color: white;
-		}
-		</style>
-		</head>
-		<body>
-		<header>Nodejs at your service</header>
+<head>
+<style>
+* {
+	box-sizing: border-box;
+}
+html, body { 
+	margin: 0;
+	padding: 0;
+	font-size: 16pt;
+}
+header {
+	background-color: DarkBlue;
+	color: white;
+	text-align: center;
+	padding: 16px;
+	font-size: 24pt;
+	font-weight: bold;
+}
+footer {
+	display: block;
+	border: 1px solid black;
+	text-align: center;
+	/*position: absolute;
+	bottom: 0px;*/
+	width: 100%;
+	background-color: DarkSlateBlue;
+	color: white;
+}
+</style>
+</head>
+<body>
+<header>Nodejs at your service</header>
 		` )
 		buffer.push( "\n<h2>Request Method</h2>\n" )
 		buffer.push( request_params.method )
@@ -124,10 +124,10 @@ handlers.index = function( request_params, response_handler ){
 		buffer.push( request_params.body )
 		buffer.push( "</xmp>\n" )
 		buffer.push( `<footer>
-		<h3>Page requests count: ${request_count}</h3>
-		</footer>
-		</body>
-		</html>` )
+<h3>Page requests count: ${request_count}</h3>
+</footer>
+</body>
+</html>` )
 
 	response_params.status_code = 200
 	response_params.body = buffer.join('')
