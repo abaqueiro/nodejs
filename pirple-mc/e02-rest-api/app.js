@@ -136,7 +136,7 @@ footer {
 handlers.not_found = function( request_params, response_handler ){
 	let response_params = {}
 	response_params.status_code = 404
-	response_params.body = '{}'
+	response_params.body = 'Not Found!'
 	response_handler( response_params )
 }
 
