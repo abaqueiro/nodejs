@@ -1,5 +1,16 @@
-// configuration
-const LISTEN_PORT = 8080
+// configuration should be taken from environment
+if ( typeof(process.env.LISTEN_PORT) == 'undefined' ){
+	console.log("ERROR: env.LISTEN_PORT not defined.")
+	process.exit(1)
+}
+var LISTEN_PORT
+if ( process.env.LISTEN_PORT.search(/^\d+$/) == -1 
+	|| (LISTEN_PORT=Number(process.env.LISTEN_PORT)) < 1
+	|| LISTEN_PORT > 65535 
+){
+	console.log(`ERROR: invalid LISTEN_PORT [${process.env.LISTEN_PORT}]`)
+	process.exit(1)
+}
 
 // using a native http module
 const http = require('http')
@@ -50,11 +61,14 @@ const server = http.createServer( function( request, response ){
 			, body: buffer.join('')
 		}
 
-		// call the handler
+		// call the handler, set callback code to write the response
 		request_handler( request_params, function( response_params ){
+			let  content_type = typeof (response_params.content_type) != 'undefined' ? response_params.content_type : 'text/plain'
+			response.setHeader('Content-Type', content_type)
+			
 			let status_code = typeof(response_params.status_code) == 'number' ? response_params.status_code : 500
 			response.writeHead( status_code )
-			
+
 			let response_body = typeof(response_params.body) == 'string' ? response_params.body : ''
 			let body_size = response_body.length
 			console.log( `RESPONSE #${request_count} ${status_code} ${body_size} bytes` )
@@ -130,9 +144,11 @@ footer {
 </html>` )
 
 	response_params.status_code = 200
+	response_params.content_type = 'text/html; charset=utf-8'
 	response_params.body = buffer.join('')
 	response_handler( response_params )
 }
+
 handlers.not_found = function( request_params, response_handler ){
 	let response_params = {}
 	response_params.status_code = 404
@@ -140,7 +156,17 @@ handlers.not_found = function( request_params, response_handler ){
 	response_handler( response_params )
 }
 
+handlers.test = function( request_params, response_handler ){
+	let o = { x: 1, y: 1 }
+	let response_params = {}
+	response_params.status_code = 200
+	response_params.content_type = 'application/json'
+	response_params.body = JSON.stringify(o)
+	response_handler( response_params )
+}
+
 // REQUEST ROUTING
 const route_index = {
 	'/': handlers.index
+	, 'test': handlers.test
 }
